@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(mv slide-16.html slide-20.html)",
-      "Bash(mv slide-17.html slide-21.html)"
-    ]
-  }
-}
