@@ -89,18 +89,16 @@ window.RELATORIO = {
       }
     },
     // slide-cartas-servicos.html mostra uma superintendencia por vez (4 etapas);
-    // sem varrer todas as .etapa-foco, o PDF perderia 3 das 4.
+    // o anexo varre cada servico das 4 e agrupa pela superintendencia, um item
+    // por servico — o nome completo aparece aqui, ja que no slide ele e cortado.
     'slide-cartas-servicos.html': {
-      titulo: 'Carta de Serviços da ANTAQ', sel: '.etapa-foco',
+      titulo: 'Carta de Serviços da ANTAQ', sel: '.svc-bar',
       ler: (el, txt) => {
-        var itens = Array.from(el.querySelectorAll('.svc-bar')).map(function (b) {
-          var n = b.dataset.num || txt(b, '.sb-num');
-          var t = b.dataset.title || txt(b, '.sb-name');
-          return n + '. ' + t + ' — ' + txt(b, '.sb-desc');
-        }).join(' ');
+        var sec = el.closest('.etapa-foco');
         return {
-          num: el.dataset.n || '', nome: txt(el, '.card-nome p'),
-          tag: txt(el, '.card-cont'), desc: itens
+          grupo: sec ? txt(sec, '.card-nome p') : '', grupoTag: sec ? txt(sec, '.card-cont') : '',
+          num: el.dataset.num || txt(el, '.sb-num'), nome: el.dataset.title || txt(el, '.sb-name'),
+          tag: '', desc: txt(el, '.sb-desc')
         };
       }
     },
