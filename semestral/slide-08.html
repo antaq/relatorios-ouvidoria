@@ -22,18 +22,19 @@
       margin: 0;
       padding: 0;
       background-color: #f3f4f6;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
+    /* altura fixa como os demais slides: o conteudo se ajusta ao quadro de
+       1920x1080 em vez de empurrar o rodape para fora */
     .slide-container {
       width: 100vw;
-      min-height: 100vh;
+      height: 100vh;
       position: relative;
       display: flex;
       flex-direction: column;
       background-color: #ffffff;
-      overflow: visible;
+      overflow: hidden;
       font-family: 'Open Sans', sans-serif;
     }
 
@@ -286,7 +287,7 @@
       padding: 1.1rem 1.5rem 1.2rem;
       display: flex;
       flex-direction: column;
-      min-height: 100%;
+      min-height: 0;
     }
 
     .chart-cap {
@@ -306,6 +307,7 @@
     .charts-grid {
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
+      grid-template-rows: minmax(0, 1fr);
       gap: 1rem;
       height: 100%;
       min-height: 0;
@@ -457,6 +459,24 @@
       font-size: .62rem;
     }
 
+    /* ultimo aperto, so no espacamento: usado quando a densidade 4 ainda
+       passa da altura do cartao */
+    .rows[data-density="5"] {
+      gap: .1rem;
+    }
+
+    .rows[data-density="5"] .bar-label {
+      font-size: .58rem;
+    }
+
+    .rows[data-density="5"] .bar-track {
+      height: .5rem;
+    }
+
+    .rows[data-density="5"] .bar-val {
+      font-size: .62rem;
+    }
+
     @media (prefers-reduced-motion: reduce) {
 
       *,
@@ -526,7 +546,7 @@
     </div>
 
 
-    <div class="px-16 pb-8 flex justify-between items-center z-10">
+    <div class="px-16 pb-6 pt-1 flex justify-between items-center z-10">
       <p class="text-gray-400 text-xs">Relatório 1º Semestre de 2026 – Ouvidoria – Agência Nacional de Transportes
         Aquaviários - ANTAQ</p>
     </div>
@@ -755,7 +775,19 @@
           requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = w; }));
         }
       });
+
+      encaixarLinhas();
     }
+
+    /* a densidade pelo numero de linhas e o ponto de partida; se a lista
+       ainda passar da altura do cartao, aperta mais um nivel */
+    function encaixarLinhas() {
+      const wrap = document.getElementById('rows');
+      if (!wrap.querySelector('.bar-row')) return;
+      let d = +wrap.dataset.density;
+      while (d < 5 && wrap.scrollHeight > wrap.clientHeight + 1) wrap.dataset.density = String(++d);
+    }
+    if (document.fonts) document.fonts.ready.then(encaixarLinhas);
 
 
     function refreshCaption() {

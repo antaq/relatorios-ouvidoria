@@ -329,6 +329,20 @@
       transition: transform .3s cubic-bezier(.34, 1.4, .64, 1);
     }
 
+    /* avatar da IARA: recorta o rosto da ilustracao de meio corpo */
+    .card-icon-foto {
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .card-icon-foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(2.5);
+      transform-origin: 43% 17%;
+    }
+
     .card:not(.card-qr):hover .card-icon {
       transform: scale(1.1) rotate(-5deg);
     }
@@ -457,7 +471,7 @@
 
         <div class="card card-entrada card-iara">
           <div class="card-head">
-            <div class="card-icon"><i class="fas fa-robot" aria-hidden="true"></i></div>
+            <div class="card-icon card-icon-foto"><img src="Imagens/IARA%2002%20(1).jpg" alt="" /></div>
             <p class="card-title">IARA</p>
           </div>
           <span class="card-pill">Inteligência artificial da ANTAQ</span>
@@ -478,18 +492,6 @@
           <p class="card-info"><strong>0800 644 5001</strong></p>
         </div>
 
-        <div class="card card-entrada card-falabr">
-          <div class="card-head">
-            <div class="card-icon"><i class="fas fa-globe" aria-hidden="true"></i></div>
-            <p class="card-title">Fala.BR</p>
-          </div>
-          <span class="card-pill">Plataforma oficial</span>
-          <p class="card-role">Plataforma do Governo Federal onde a manifestação é registrada, protocolada e acompanhada
-            pelo próprio cidadão.</p>
-
-          <p class="card-info"><strong>falabr.cgu.gov.br/v2/</strong></p>
-        </div>
-
         <div class="card card-entrada card-whatsapp">
           <div class="card-head">
             <div class="card-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
@@ -501,6 +503,17 @@
           <p class="card-info">Acesse o QR-CODE</p>
         </div>
 
+        <div class="card card-entrada card-falabr">
+          <div class="card-head">
+            <div class="card-icon"><i class="fas fa-globe" aria-hidden="true"></i></div>
+            <p class="card-title">Fala.BR</p>
+          </div>
+          <span class="card-pill">Plataforma oficial</span>
+          <p class="card-role">Plataforma do Governo Federal onde a manifestação é registrada, protocolada e acompanhada
+            pelo próprio cidadão.</p>
+
+          <p class="card-info"><strong>falabr.cgu.gov.br/v2/</strong></p>
+        </div>
       </div>
 
 
@@ -548,7 +561,7 @@
             <img src="Imagens/QRCODE_IARA.jpeg"
               alt="QR Code para falar com a IARA, assistente de inteligência artificial da ANTAQ, pelo WhatsApp" />
           </div>
-          <p class="card-info">Aponte a câmera do celular para falar com a <strong>IARA</strong> no WhatsApp.</p>
+          <p class="card-info">Aponte a câmera do celular para falar com a <strong>IARA</strong> pelo WhatsApp.</p>
         </div>
 
       </div>

@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-
+<!-- Autoria exclusiva do código-fonte e da lógica de implementação: Caio Fábio Alves da Silva. -->
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  enquetes-2026/index.html — VISUALIZADOR DE SLIDES
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  Carrega cada slide em um iframe e controla a navegação.
+  ║  O QUE ATUALIZAR:
+  ║    const deck = [...]  ← reordene/mova arquivos entre os blocos aqui
+  ║  Teclas: ← → navegar, Espaço próximo, F tela cheia, Home início
+  ║  Clique nas laterais escuras também navega.
+  ╚══════════════════════════════════════════════════════════════╝
+-->
 <html lang="pt-BR">
 
 <head>
@@ -49,7 +60,7 @@
       flex: 0 0 auto;
     }
 
-
+    /* Zonas de clique de navegação — ficam no "fora do palco" (área azul), nas laterais do slide */
     .click-zone {
       flex: 1 1 0;
       align-self: stretch;
@@ -69,8 +80,8 @@
       transform-origin: top left;
     }
 
-
-
+    /* Wave acima do navbar */
+    /* Doca de navegação: só aparece no hover do rodapé */
     .nav-dock {
       position: fixed;
       left: 0;
@@ -145,7 +156,7 @@
       }
     }
 
-
+    /* Navigation bar - same style as Kenia */
     .nav-bar {
       position: fixed;
       bottom: 24px;
@@ -246,7 +257,8 @@
       font-size: 12px;
     }
 
-
+    /* Slide dots — este relatório tem ~95 telas, então a régua rola
+       horizontalmente em telas estreitas em vez de esticar a doca. */
     .nav-dots {
       display: flex;
       gap: 2px;
@@ -271,7 +283,7 @@
       width: 5px;
       height: 5px;
       border-radius: 50%;
-
+      /* Tom sutil por bloco: variação de opacidade do azul institucional */
       background: rgba(122, 178, 216, calc(0.20 + (var(--dot-tint, 0.6) * 0.28)));
       border: none;
       cursor: pointer;
@@ -279,7 +291,7 @@
       transition: all 0.2s;
     }
 
-
+    /* Separação visível entre os blocos (Abertura · Blocos 1–6 · Sobras) */
     .nav-dots button.block-start {
       margin-left: 9px;
     }
@@ -294,7 +306,7 @@
       background: rgba(255, 255, 255, 0.65);
     }
 
-
+    /* Fullscreen button */
     .fs-btn {
       position: fixed;
       top: 16px;
@@ -319,7 +331,7 @@
       background: rgba(12, 50, 111, 1);
     }
 
-
+    /* Botão de impressão — mesmo formato do fechar/tela cheia */
     .pdf-btn {
       position: fixed;
       top: 16px;
@@ -345,7 +357,7 @@
       background: rgba(180, 120, 0, 1);
     }
 
-
+    /* Help button in nav-bar */
     .help-btn {
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.3);
@@ -370,7 +382,7 @@
       border-color: #0090C0;
     }
 
-
+    /* Nav hints — overlay modal */
     .nav-hints-overlay {
       position: fixed;
       inset: 0;
@@ -499,7 +511,7 @@
       background: #007aad;
     }
 
-
+    /* Close button */
     .close-btn {
       position: fixed;
       top: 16px;
@@ -523,81 +535,6 @@
     .close-btn:hover {
       background: rgba(185, 28, 28, 1);
     }
-  
-    /* ---- confirmacao de download do PPTX ---- */
-    .pptx-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(4px);
-      z-index: 1200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-
-    .pptx-overlay.visible { opacity: 1; pointer-events: auto; }
-
-    .pptx-box {
-      position: relative;
-      background: linear-gradient(160deg, #0c3273 0%, #0a2040 100%);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 18px;
-      padding: 30px 34px 26px;
-      max-width: 440px;
-      width: 90%;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
-      font-family: 'Roboto', sans-serif;
-      color: #fff;
-      text-align: center;
-    }
-
-    .pptx-box .pptx-ico {
-      width: 54px;
-      height: 54px;
-      margin: 0 auto 14px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: #f2a900;
-      background: rgba(242, 169, 0, 0.16);
-      border: 1px solid rgba(242, 169, 0, 0.38);
-    }
-
-    .pptx-box h3 { font-size: 18px; font-weight: 700; margin: 0 0 8px; }
-    .pptx-box p  { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.6); margin: 0 0 22px; }
-    .pptx-box .pptx-arq {
-      display: block;
-      font-size: 12px;
-      color: rgba(255,255,255,0.42);
-      margin-top: 6px;
-      word-break: break-all;
-    }
-
-    .pptx-acoes { display: flex; gap: 10px; }
-
-    .pptx-acoes button {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Roboto', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .pptx-sim { background: #0090C0; color: #fff; }
-    .pptx-sim:hover { background: #007aad; }
-    .pptx-nao { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.18) !important; }
-    .pptx-nao:hover { background: rgba(255,255,255,0.16); color: #fff; }
-    .pptx-acoes button:focus-visible { outline: 2px solid #4dcfff; outline-offset: 2px; }
   </style>
 </head>
 
@@ -631,10 +568,10 @@
     </div>
   </div>
 
-  <button class="pdf-btn" id="pptxBtn" type="button" title="Baixar PowerPoint dos slides"
-    aria-label="Baixar PowerPoint dos slides"><i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i></button>
-  <button class="close-btn" onclick="closePresentation()" title="Fechar apresentação"
-    aria-label="Fechar apresentação"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  <a class="pdf-btn" href="relatorio.html" target="_blank" rel="noopener noreferrer" title="Imprimir / Salvar PDF"
+    aria-label="Imprimir / Salvar PDF"><i class="fa-solid fa-print" aria-hidden="true"></i></a>
+  <button class="close-btn" onclick="closePresentation()" title="Fechar apresentação" aria-label="Fechar apresentação"><i
+      class="fa-solid fa-xmark" aria-hidden="true"></i></button>
   <button class="fs-btn" onclick="toggleFullscreen()" title="Tela Cheia (F)" aria-label="Alternar tela cheia"><i
       class="fa-solid fa-expand" id="fsIcon" aria-hidden="true"></i></button>
 
@@ -680,10 +617,10 @@
       <div class="hint-row">
         <div class="hint-icon-box"
           style="background:rgba(242,169,0,0.2); border-color:rgba(242,169,0,0.4); color:#f2a900;"><i
-            class="fa-solid fa-file-powerpoint"></i></div>
+            class="fa-solid fa-print"></i></div>
         <div class="hint-text">
-          <strong>Baixar PowerPoint</strong>
-          <span>Baixe os slides em .pptx para editar ou apresentar</span>
+          <strong>Imprimir / Salvar PDF</strong>
+          <span>Ícone de impressora no canto superior direito — abre a versão para impressão.</span>
         </div>
       </div>
 
@@ -691,30 +628,97 @@
     </div>
   </div>
 
-
-  <div class="pptx-overlay" id="pptxOverlay">
-    <div class="pptx-box" role="dialog" aria-modal="true" aria-labelledby="pptxTitulo">
-      <div class="pptx-ico"><i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i></div>
-      <h3 id="pptxTitulo">Deseja baixar o arquivo PowerPoint dos slides apresentados?</h3>
-      <p>O download comeca imediatamente.<span class="pptx-arq">Relatorio-Anual-Enquetes-Conselho-de-Usuarios-ANTAQ-2026.pptx</span></p>
-      <div class="pptx-acoes">
-        <button class="pptx-nao" type="button" id="pptxNao">Nao</button>
-        <button class="pptx-sim" type="button" id="pptxSim">Sim, baixar</button>
-      </div>
-    </div>
-  </div>
-
   <script src="dados-enquetes.js"></script>
-  <script src="deck.js"></script>
   <script>
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║  ESTRUTURA DA APRESENTAÇÃO — fonte única da ordem             ║
+    // ╠══════════════════════════════════════════════════════════════╣
+    // ║  Abertura + 6 blocos temáticos:                              ║
+    // ║   1 Visão Geral das Ouvidorias · 2 A Ouvidoria da ANTAQ ·    ║
+    // ║   3 Carta de Serviços · 4 Conselho de Usuários ·             ║
+    // ║   5 Considerações Finais · 6 Apêndice.                       ║
+    // ║  Para reordenar: mova arquivos aqui. `slides`, o contador e   ║
+    // ║  os dots derivam disto.                                       ║
+    // ║  `tint` = variação de opacidade do azul (0..1) usada nos dots.║
+    // ╚══════════════════════════════════════════════════════════════╝
+    // As telas de enquete não são listadas uma a uma: elas saem de
+    // dados-enquetes.js, na ordem SOG → SRG → SAF → SFC. Cada enquete ocupa
+    // DUAS telas — `&p=1` com as questões 1 e 2 (rosca) e `&p=2` com as
+    // questões 3 e 4 (barras) mais as sugestões. As enquetes em que ninguém
+    // usou o serviço (`q2` nulo) não têm questões 2 a 5, então ficam em uma
+    // tela só. Publicar/retirar uma enquete = mexer só no .js.
+    const telasEnquetes = [];
+    ['SOG', 'SRG', 'SAF', 'SFC'].forEach((sigla) => {
+      ENQUETES.filter((e) => e.sup === sigla)
+        .sort((a, b) => a.num - b.num)
+        .forEach((e) => {
+          const base = 'slide-enquete.html?e=' + e.id;
+          telasEnquetes.push(base + '&p=1');
+          if (e.q2) telasEnquetes.push(base + '&p=2');
+        });
+    });
 
+    const deck = [
+      {
+        block: 'Abertura', short: 'Abertura', tint: 0.35, //4 slides
+        files: ['slide-00.html', 'slide-01.html', 'slide-02.html', 'slide-03.html'],
+      },
+      {
+        block: 'Bloco 1 · Visão Geral das Ouvidorias públicas', short: 'Visão Geral', tint: 1, //6 slides
+        files: ['capa-bloco-1.html', 'slide-04.html', 'slide-05.html', 'slide-06.html', 'slide-07.html', 'slide-08.html'],
+      },
+      {
+        block: 'Bloco 2 · A Ouvidoria da ANTAQ', short: 'A Ouvidoria da ANTAQ', tint: 0.85, //3 slides
+        files: ['capa-bloco-2.html', 'slide-09.html', 'slide-10.html'],
+      },
+      {
+        // Ordem do documento-fonte: apresentação (p.16) → 33 serviços (p.17) →
+        // serviços por superintendência (p.18–20) → números (p.21) →
+        // evolução histórica 2021–2026 (fecha o bloco).
+        block: 'Bloco 3 · Carta de Serviços da ANTAQ', short: 'Carta de Serviços', tint: 0.7, //7 slides
+        files: ['capa-bloco-3.html', 'slide-11.html', 'slide-carta-32servicos.html?p=1', 'slide-carta-32servicos.html?p=2', 'slide-12.html', 'slide-13.html', 'slide-14.html'],
+      },
+      {
+        // Ordem escolhida na revisão (não segue mais o documento-fonte):
+        // "Como se tornar conselheiro" → "Conselho em números" → Metodologia
+        // (5 etapas) → Estrutura das enquetes. O slide de fluxo da consulta
+        // foi removido do deck.
+        block: 'Bloco 4 · Conselho de Usuários da ANTAQ', short: 'Conselho de Usuários', tint: 0.55,
+        files: [
+          'capa-bloco-4.html',
+          'slide-15.html', 'slide-16.html', 'slide-17.html',
+          'slide-18.html', 'slide-19.html',
+          'slide-20.html',
+          'slide-tabela-enquetes.html?p=1', 'slide-tabela-enquetes.html?p=2',
+          ...telasEnquetes,
+        ],
+      },
+      {
+        // slide-resultados-perspectivas.html unificou os dois slides antigos de
+        // resultados (órgão/cidadão + "para ambos") num stepper de 3
+        // perspectivas, no mesmo formato do slide-19; o convite para novos
+        // conselheiros que fechava o bloco virou o overlay (tecla C) daquele
+        // slide. slide-resultados-orgao.html e slide-22.html saíram do deck.
+        block: 'Bloco 5 · Considerações Finais', short: 'Considerações Finais', tint: 0.4, //3 slides
+        files: ['capa-bloco-5.html', 'slide-21.html', 'slide-resultados-perspectivas.html'],
+      },
+      {
+        block: 'Bloco 6 · Apêndice', short: 'Apêndice', tint: 0.3, //6 slides
+        files: ['capa-bloco-6.html', 'slide-23.html', 'slide-24.html', 'slide-25.html', 'slide-26.html', 'slide-27.html'],
+      },
+    ];
 
-
-    const paginas = RELATORIO.paraApresentacao();
-    const slides = paginas.map((p) => p.file);
-    const meta = paginas.map((p) => ({ block: p.block, blockShort: p.blockShort, blockIndex: p.blockIndex, tint: p.tint }));
+    // Deriva `slides` (governa a navegação) + `meta` paralelo com o
+    // bloco de cada slide (usado pelos dots).
+    const slides = [];
+    const meta = [];
+    deck.forEach((b, bi) => {
+      b.files.forEach((file) => {
+        slides.push(file);
+        meta.push({ block: b.block, blockShort: b.short, blockIndex: bi, tint: b.tint });
+      });
+    });
     const total = slides.length;
-    if (window.location.search.includes('auditoria=1') && RELATORIO.checarSanidade) RELATORIO.checarSanidade();
     const frame = document.getElementById('slideFrame');
     let current = 1;
 
@@ -742,15 +746,15 @@
         const on = i === current - 1;
         dot.classList.toggle('active', on);
         dot.setAttribute('aria-current', on ? 'true' : 'false');
-
+        // Mantém o slide atual visível quando a régua de dots está rolando
         if (on && dot.scrollIntoView) {
           dot.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         }
       });
     }
 
-
-
+    // Build dots — 1 por slide (navegação direta preservada), tingidos e
+    // separados por bloco para dar leitura visual dos 4 blocos.
     const dotsContainer = document.getElementById('navDots');
     for (let i = 0; i < total; i++) {
       const dot = document.createElement('button');
@@ -764,13 +768,13 @@
       dotsContainer.appendChild(dot);
     }
 
-
+    // Close presentation: returns to root index, or closes tab if opened from there
     function closePresentation() {
       if (window.opener) { window.close(); }
       else { window.location.href = '../index.html'; }
     }
 
-
+    // Fullscreen
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => { });
@@ -779,7 +783,7 @@
       }
     }
 
-
+    // Keyboard navigation
     function handleKey(key) {
       if (key === 'ArrowRight' || key === ' ' || key === 'PageDown') { next(); }
       else if (key === 'ArrowLeft' || key === 'PageUp') { prev(); }
@@ -793,9 +797,8 @@
         handleKey(e.key);
       }
     });
-
+    // Receive key events forwarded from the iframe slides
     window.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'go-menu') { irParaMenu(); }
       if (e.data && e.data.type === 'slide-nav' && e.data.key) {
         handleKey(e.data.key);
       }
@@ -803,24 +806,24 @@
         current = e.data.slide;
         render();
       }
-
+      // Navegação por nome de arquivo (robusto a reordenação do array slides)
       if (e.data && e.data.type === 'slide-goto-file' && e.data.file) {
         const idx = slides.indexOf(e.data.file);
         if (idx !== -1) { current = idx + 1; render(); }
       }
     });
 
-
+    // Click side zones to navigate
     document.getElementById('clickLeft').addEventListener('click', () => prev());
     document.getElementById('clickRight').addEventListener('click', () => next());
 
     render();
 
-
+    // ===== Contador de página editável — clicar permite digitar o nº do slide =====
     const pageInfoEl = document.getElementById('pageInfo');
     pageInfoEl.title = 'Clique para digitar o número do slide';
     pageInfoEl.addEventListener('click', () => {
-      if (document.querySelector('.page-input')) return;
+      if (document.querySelector('.page-input')) return; // já aberto
       const input = document.createElement('input');
       input.type = 'number';
       input.className = 'page-input';
@@ -847,7 +850,7 @@
         }
         close();
       }
-
+      // Impede que as teclas cheguem ao atalho global de navegação (setas/espaço)
       input.addEventListener('keydown', (e) => {
         e.stopPropagation();
         if (e.key === 'Enter') commit();
@@ -856,7 +859,7 @@
       input.addEventListener('blur', commit);
     });
 
-
+    // Nav hints modal
     const navHints = document.getElementById('navHints');
     const helpBtn = document.getElementById('helpBtn');
 
@@ -865,16 +868,16 @@
       helpBtn.classList.toggle('active', open);
     }
 
-
+    // Close overlay clicking outside the panel
     navHints.addEventListener('click', (e) => {
       if (e.target === navHints) toggleHints();
     });
 
-
+    // Show automatically on first load
     navHints.classList.add('visible');
     helpBtn.classList.add('active');
 
-
+    // Scale iframe to fit stage
     const stage = document.querySelector('.stage');
     function scaleFrame() {
       const scale = Math.min(stage.clientWidth / 1920, stage.clientHeight / 1080);
@@ -883,58 +886,6 @@
     scaleFrame();
     window.addEventListener('resize', scaleFrame);
     new ResizeObserver(scaleFrame).observe(stage);
-
-    /* ---- confirmacao de download do PPTX ---- */
-    const ARQUIVO_PPTX = 'Relatorio-Anual-Enquetes-Conselho-de-Usuarios-ANTAQ-2026.pptx';
-    const pptxOverlay = document.getElementById('pptxOverlay');
-    const pptxBtn = document.getElementById('pptxBtn');
-
-    function togglePptx(estado) {
-      const aberto = typeof estado === 'boolean'
-        ? pptxOverlay.classList.toggle('visible', estado)
-        : pptxOverlay.classList.toggle('visible');
-      if (aberto) document.getElementById('pptxSim').focus();
-      else if (pptxBtn) pptxBtn.focus();
-    }
-
-    if (pptxBtn) pptxBtn.addEventListener('click', () => togglePptx(true));
-    document.getElementById('pptxNao').addEventListener('click', () => togglePptx(false));
-    pptxOverlay.addEventListener('click', (e) => { if (e.target === pptxOverlay) togglePptx(false); });
-
-    document.getElementById('pptxSim').addEventListener('click', () => {
-      const a = document.createElement('a');
-      a.href = ARQUIVO_PPTX;
-      a.download = ARQUIVO_PPTX;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      togglePptx(false);
-    });
-
-    /* ---- Ctrl+M volta para o menu de relatorios ---- */
-    const MENU_URL = '../index.html';
-
-    function irParaMenu() { window.location.href = MENU_URL; }
-
-    function ehCtrlM(e) { return (e.ctrlKey || e.metaKey) && (e.key === 'm' || e.key === 'M'); }
-
-    document.addEventListener('keydown', (e) => {
-      if (ehCtrlM(e)) { e.preventDefault(); irParaMenu(); }
-    });
-
-    /* o slide vive num iframe e captura o teclado; quando a origem permite,
-       o mesmo atalho e anexado la dentro a cada troca de slide */
-    function armarAtalhoNoSlide() {
-      try {
-        const doc = frame.contentDocument;
-        if (!doc || doc.__menuArmado) return;
-        doc.__menuArmado = true;
-        doc.addEventListener('keydown', (e) => {
-          if (ehCtrlM(e)) { e.preventDefault(); irParaMenu(); }
-        });
-      } catch (err) { /* origem diferente: o postMessage do a11y.js cobre */ }
-    }
-    frame.addEventListener('load', armarAtalhoNoSlide);
   </script>
   <script src="a11y.js" defer></script>
 </body>
