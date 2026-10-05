@@ -229,35 +229,6 @@
       margin-bottom: 3.4mm;
     }
 
-    .annex-grupo {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-      border-bottom: 1px solid #cfe0ee;
-      padding-bottom: 2px;
-      margin-bottom: 2.6mm;
-    }
-
-    .annex-grupo:not(:first-child) {
-      margin-top: 4.5mm;
-    }
-
-    .ag-nome {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 900;
-      font-size: 10pt;
-      color: #0070C0;
-      line-height: 1.2;
-    }
-
-    .ag-tag {
-      font-size: 7.5pt;
-      font-weight: 600;
-      color: #64748b;
-      white-space: nowrap;
-    }
-
     .ai-src {
       font-size: 7pt;
       color: #94a3b8;
@@ -490,121 +461,7 @@
       return d;
     }
 
-    /* titulo de grupo (ex.: a superintendencia na Carta de Servicos); ao
-       continuar em outra coluna, repete o nome com "(continuação)" */
-    function grupoHTML(nome, tag, continuacao) {
-      const d = document.createElement('div');
-      d.className = 'annex-grupo';
-      d.innerHTML = '<span class="ag-nome"></span><span class="ag-tag"></span>';
-      d.querySelector('.ag-nome').textContent = nome + (continuacao ? ' (continuação)' : '');
-      if (!continuacao && tag) d.querySelector('.ag-tag').textContent = tag;
-      return d;
-    }
-
-    /* o ultimo bloco da coluna termina dentro dela? Mede a caixa real, entao
-       so vale depois das fontes carregadas */
-    function cabe(col) {
-      const ult = col.lastElementChild;
-      return !ult || ult.getBoundingClientRect().bottom <= col.getBoundingClientRect().bottom + 0.5;
-    }
-
-    /* Distribui os itens de um anexo em paginas de duas colunas, logo apos o
-       slide de origem. Item que nao cabe vai para a proxima coluna; item maior
-       que uma coluna inteira tem a descricao dividida (de preferencia no fim
-       de uma frase) e segue como "(continuação)" — nada fica cortado. */
-    function paginarAnexo(base, titulo, itens) {
-      let parte = 0, ancora = base, cols = [], ic = 0, grupo = null;
-
-      function novaPagina() {
-        parte++;
-        const page = novaPaginaAnexo(titulo, parte);
-        ancora.after(page);
-        ancora = page;
-        cols = [...page.querySelectorAll('.annex-col')];
-        ic = 0;
-      }
-
-      function proximaColuna(repetirGrupo) {
-        ic++;
-        if (ic >= cols.length) novaPagina();
-        if (repetirGrupo && grupo) cols[ic].appendChild(grupoHTML(grupo.nome, '', true));
-      }
-
-      const semItens = () => !cols[ic].querySelector('.annex-item');
-
-      function colocar(it) {
-        for (;;) {
-          const col = cols[ic];
-          const abreGrupo = !!it.grupo && (!grupo || grupo.nome !== it.grupo);
-          const cab = abreGrupo ? grupoHTML(it.grupo, it.grupoTag, false) : null;
-          if (cab) col.appendChild(cab);
-          const el = itemHTML(it);
-          col.appendChild(el);
-
-          if (cabe(col)) {
-            if (abreGrupo) grupo = { nome: it.grupo };
-            return;
-          }
-
-          if (!semItens()) {
-            /* coluna ja tem conteudo: tenta a proxima; um grupo novo nao
-               repete o titulo do grupo anterior */
-            el.remove();
-            if (cab) cab.remove();
-            proximaColuna(!abreGrupo);
-            continue;
-          }
-
-          /* nem numa coluna vazia cabe: divide a descricao */
-          const pd = el.querySelector('.ai-desc');
-          const palavras = (it.desc || '').split(' ');
-          if (!pd || palavras.length < 2) {
-            if (abreGrupo) grupo = { nome: it.grupo };
-            return;
-          }
-          const src = el.querySelector('.ai-src');
-          if (src) src.remove();
-
-          let lo = 1, hi = palavras.length - 1, k = 0;
-          while (lo <= hi) {
-            const m = (lo + hi) >> 1;
-            pd.textContent = palavras.slice(0, m).join(' ');
-            if (cabe(col)) { k = m; lo = m + 1; } else hi = m - 1;
-          }
-          if (!k) {
-            /* nem uma palavra cabe apos o titulo numa coluna vazia: nao ha
-               como dividir; mantem o item inteiro */
-            pd.textContent = it.desc;
-            if (abreGrupo) grupo = { nome: it.grupo };
-            return;
-          }
-          for (let j = k; j >= Math.ceil(k * 0.6); j--) {
-            if (/[.;:]$/.test(palavras[j - 1])) { k = j; break; }
-          }
-          pd.textContent = palavras.slice(0, k).join(' ');
-          if (abreGrupo) grupo = { nome: it.grupo };
-
-          it = {
-            num: it.num, nome: it.nome.replace(/ \(continuação\)$/, '') + ' (continuação)',
-            desc: palavras.slice(k).join(' '), src: it.src, grupo: it.grupo
-          };
-          proximaColuna(true);
-        }
-      }
-
-      novaPagina();
-      itens.forEach(colocar);
-    }
-
     async function gerarAnexos() {
-      /* medir antes das fontes da web chegarem deixa o texto crescer depois
-         e passar da coluna */
-      if (document.fonts) {
-        await Promise.all(['900 13pt Montserrat', '800 9.5pt Montserrat', '400 8pt "Open Sans"',
-          '600 7.5pt "Open Sans"'].map(f => document.fonts.load(f).catch(() => null)));
-        await document.fonts.ready;
-      }
-
       for (const [file, cfg] of Object.entries(ANEXOS)) {
         const base = paginas.find(p => p.dataset.file === file);
         if (!base) continue;
@@ -616,7 +473,34 @@
         const itens = [...doc.querySelectorAll(cfg.sel)].map(cfg.ler).filter(i => i.nome);
         if (!itens.length) continue;
 
-        paginarAnexo(base, cfg.titulo, itens);
+        let parte = 1;
+        let page = novaPaginaAnexo(cfg.titulo, parte);
+        base.after(page);
+        let ancora = page;
+        let cols = [...page.querySelectorAll('.annex-col')];
+        let ic = 0;
+
+        for (const it of itens) {
+          let el = itemHTML(it);
+          cols[ic].appendChild(el);
+
+
+          if (cols[ic].scrollHeight > cols[ic].clientHeight + 1) {
+            cols[ic].removeChild(el);
+            ic++;
+            if (ic >= cols.length) {
+              parte++;
+              page = novaPaginaAnexo(cfg.titulo, parte);
+              ancora.after(page);
+              ancora = page;
+              cols = [...page.querySelectorAll('.annex-col')];
+              ic = 0;
+            }
+            cols[ic].appendChild(el);
+
+
+          }
+        }
       }
     }
 

@@ -12,7 +12,12 @@ desktop.ini
 *.swo
 *~
 
-# Configuracoes locais de ferramentas (por maquina, nao fazem parte do site)
+# Claude Code (config local)
+.claude/
+
+# MCP: config local de servidores, por maquina.
+# Foi o `npx shadcn mcp init` que criou semestral/.mcp.json nesta sessao —
+# e config de ferramenta, nao conteudo do relatorio.
 .mcp.json
 
 # Backups e sobras de merge/patch
